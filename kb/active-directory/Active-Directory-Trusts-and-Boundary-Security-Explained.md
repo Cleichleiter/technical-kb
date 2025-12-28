@@ -1,15 +1,3 @@
-\## \*\*KB #6: Active Directory Trusts and Boundary Security Explained\*\*
-
-
-
-Below is \*\*KB #6\*\*, written in the \*\*exact same style\*\* you approved (no code blocks, clean Markdown, GitHub-friendly).
-
-
-
----
-
-
-
 \# Active Directory Trusts and Boundary Security Explained
 
 
