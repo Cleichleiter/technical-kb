@@ -1,24 +1,30 @@
-Interpreting Active Directory Security Findings and Severity Levels
-
-Purpose
+\# Interpreting Active Directory Security Findings and Severity Levels
 
 
 
-This knowledge base article explains how to interpret security findings produced by the Active Directory security assessment framework and how to apply severity ratings correctly.
+\## Purpose
 
 
 
-Severity levels in this repository reflect technical risk and potential impact, not immediate exploitability or incident status. Understanding this distinction is critical to using assessment results responsibly and effectively.
+This knowledge base article explains how to \*\*interpret security findings\*\* produced by the Active Directory security assessment framework and how to \*\*apply severity ratings correctly\*\*.
 
 
 
-Severity Intent vs. Urgency
+Severity levels in this repository reflect \*\*technical risk and potential impact\*\*, not immediate exploitability or incident status. Understanding this distinction is critical to using assessment results responsibly and effectively.
 
 
 
-Severity indicates what could happen if a condition is abused.
+---
 
-Urgency reflects how quickly action is required based on context.
+
+
+\## Severity Intent vs. Urgency
+
+
+
+Severity indicates \*\*what could happen\*\* if a condition is abused.  
+
+Urgency reflects \*\*how quickly action is required\*\* based on context.
 
 
 
@@ -30,353 +36,293 @@ A finding can be:
 
 
 
-High severity but low urgency (e.g., a risky trust that is inactive)
+\- \*\*High severity, low urgency\*\*  
 
+&nbsp; Example: A risky trust that exists but is inactive or tightly controlled
 
 
-Medium severity but high urgency (e.g., misconfiguration during an active incident)
 
+\- \*\*Medium severity, high urgency\*\*  
 
+&nbsp; Example: A misconfiguration discovered during an active incident
 
-Low severity but strategic (e.g., hygiene improvements that reduce future risk)
 
 
+\- \*\*Low severity, strategic importance\*\*  
 
-Severity helps you prioritize attention; urgency determines response timing.
+&nbsp; Example: Hygiene improvements that reduce long-term risk
 
 
 
-Severity Definitions
+Severity helps prioritize \*\*attention\*\*.  
 
-Critical
+Urgency determines \*\*response timing\*\*.
 
 
 
-Definition:
+---
 
-A configuration or condition that provides direct or near-direct Tier-0 compromise potential.
 
 
+\## Severity Definitions
 
-Characteristics:
 
 
+\### Critical
 
-Minimal attacker prerequisites
 
 
+\*\*Definition:\*\*  
 
-Broad or complete domain impact
+A configuration or condition that provides \*\*direct or near-direct Tier-0 compromise potential\*\*.
 
 
 
-Commonly abused in real-world attacks
+\*\*Characteristics:\*\*
 
+\- Minimal attacker prerequisites
 
+\- Broad or complete domain impact
 
-Examples:
+\- Commonly abused in real-world attacks
 
 
 
-Non-standard principals with DCSync rights
+\*\*Examples:\*\*
 
+\- Non-standard principals with DCSync rights
 
+\- Unconstrained delegation on privileged systems
 
-Unconstrained delegation on privileged systems
+\- Shadow admin ACLs on Tier-0 objects
 
 
 
-Shadow admin ACLs on Tier-0 objects
+\*\*Expected response:\*\*
 
+\- Immediate validation
 
+\- Rapid remediation or containment
 
-Expected Response:
+\- Executive awareness if confirmed
 
 
 
-Immediate validation
+---
 
 
 
-Rapid remediation or containment
+\### High
 
 
 
-Executive awareness if confirmed
+\*\*Definition:\*\*  
 
+A serious misconfiguration that creates a \*\*clear exploitation path\*\* under realistic conditions.
 
 
-High
 
+\*\*Characteristics:\*\*
 
+\- Requires some attacker positioning
 
-Definition:
+\- Can lead to privilege escalation or lateral movement
 
-A serious misconfiguration that creates a clear exploitation path under realistic conditions.
+\- Often chained with other weaknesses
 
 
 
-Characteristics:
+\*\*Examples:\*\*
 
+\- Privileged service accounts with delegation enabled
 
+\- DES-enabled Kerberos encryption
 
-Requires some attacker positioning
+\- Risky AD CS templates
 
 
 
-Can lead to privilege escalation or lateral movement
+\*\*Expected response:\*\*
 
+\- Prompt review and remediation planning
 
+\- Risk acceptance only with documented justification
 
-Often chained with other weaknesses
 
 
+---
 
-Examples:
 
 
+\### Medium
 
-Privileged service accounts with delegation enabled
 
 
+\*\*Definition:\*\*  
 
-DES-enabled Kerberos encryption
+A configuration that \*\*increases attack surface\*\* or weakens security posture but may require multiple conditions to exploit.
 
 
 
-Risky AD CS templates
+\*\*Characteristics:\*\*
 
+\- Context-dependent risk
 
+\- Often environment- or use-case-specific
 
-Expected Response:
+\- May be legitimate but should be documented
 
 
 
-Prompt review and remediation planning
+\*\*Examples:\*\*
 
+\- Constrained delegation configurations
 
+\- RC4-only Kerberos encryption
 
-Risk acceptance only with documented justification
+\- External trusts with weak boundary controls
 
 
 
-Medium
+\*\*Expected response:\*\*
 
+\- Validate business need
 
+\- Reduce scope or harden where feasible
 
-Definition:
+\- Track as part of the security backlog
 
-A configuration that increases attack surface or weakens security posture but may require multiple conditions to exploit.
 
 
+---
 
-Characteristics:
 
 
+\### Low
 
-Context-dependent risk
 
 
+\*\*Definition:\*\*  
 
-Often environment- or use-case-specific
+A \*\*hygiene or defense-in-depth improvement\*\* that reduces future risk but is unlikely to be directly exploitable on its own.
 
 
 
-May be legitimate but should be documented
+\*\*Characteristics:\*\*
 
+\- Improves resilience and clarity
 
+\- Often accumulates risk over time if ignored
 
-Examples:
+\- Common in long-lived environments
 
 
 
-Constrained delegation configurations
+\*\*Examples:\*\*
 
+\- Inactive privileged accounts
 
+\- Privileged users not in Protected Users
 
-RC4-only Kerberos encryption
+\- Legacy functional levels without immediate exposure
 
 
 
-External trusts with weak boundary controls
+\*\*Expected response:\*\*
 
+\- Schedule remediation during normal maintenance
 
+\- Address opportunistically during other changes
 
-Expected Response:
 
 
+---
 
-Validate business need
 
 
+\### Info
 
-Reduce scope or harden where feasible
 
 
+\*\*Definition:\*\*  
 
-Track as part of security backlog
+Visibility or inventory information with \*\*no implied risk judgment\*\*.
 
 
 
-Low
+\*\*Characteristics:\*\*
 
+\- Provides context for other findings
 
+\- Useful for audits and baselines
 
-Definition:
+\- Often referenced in discussions, not actions
 
-A hygiene or defense-in-depth improvement that reduces future risk but is unlikely to be directly exploitable on its own.
 
 
+\*\*Examples:\*\*
 
-Characteristics:
+\- Privileged group membership counts
 
+\- Domain controller OS distribution
 
+\- Trust inventory listings
 
-Improves resilience and clarity
 
 
+\*\*Expected response:\*\*
 
-Often accumulates risk over time if ignored
+\- Review for awareness
 
+\- Use as supporting data
 
 
-Common in long-lived environments
 
+---
 
 
-Examples:
 
+\### Warning
 
 
-Inactive privileged accounts
 
+\*\*Definition:\*\*  
 
+Indicates \*\*assessment limitations or missing prerequisites\*\*, not a security finding.
 
-Privileged users not in Protected Users
 
 
+\*\*Characteristics:\*\*
 
-Legacy functional levels without immediate exposure
+\- Script could not complete fully
 
+\- Required module or permission missing
 
+\- Partial visibility only
 
-Expected Response:
 
 
+\*\*Examples:\*\*
 
-Schedule remediation during normal maintenance
+\- ActiveDirectory module not available
 
+\- Insufficient rights to read ACLs
 
 
-Address opportunistically during other changes
 
+\*\*Expected response:\*\*
 
+\- Re-run assessment with proper permissions
 
-Info
+\- Document scope limitations if unresolved
 
 
 
-Definition:
+---
 
-Visibility or inventory information with no implied risk judgment.
 
 
-
-Characteristics:
-
-
-
-Provides context for other findings
-
-
-
-Useful for audits and baselines
-
-
-
-Often referenced in discussions, not actions
-
-
-
-Examples:
-
-
-
-Privileged group membership counts
-
-
-
-Domain controller OS distribution
-
-
-
-Trust inventory listings
-
-
-
-Expected Response:
-
-
-
-Review for awareness
-
-
-
-Use as supporting data
-
-
-
-Warning
-
-
-
-Definition:
-
-Indicates assessment limitations or missing prerequisites, not a security finding.
-
-
-
-Characteristics:
-
-
-
-Script could not complete fully
-
-
-
-Required module or permission missing
-
-
-
-Partial visibility only
-
-
-
-Examples:
-
-
-
-ActiveDirectory module not available
-
-
-
-Insufficient rights to read ACLs
-
-
-
-Expected Response:
-
-
-
-Re-run assessment with proper permissions
-
-
-
-Document scope limitations if unresolved
-
-
-
-Environmental vs. Exploitable Risk
+\## Environmental vs. Exploitable Risk
 
 
 
@@ -388,13 +334,13 @@ This framework distinguishes between:
 
 
 
-Environmental risk
+\### Environmental Risk
 
-A condition that weakens security posture but may be controlled by other factors (process, monitoring, isolation).
+A condition that weakens security posture but may be controlled by other factors such as process, monitoring, or isolation.
 
 
 
-Exploitable risk
+\### Exploitable Risk
 
 A condition that can be realistically abused given common attacker access patterns.
 
@@ -402,13 +348,9 @@ A condition that can be realistically abused given common attacker access patter
 
 For example:
 
+\- An external trust may be \*\*high risk\*\* in one environment and \*\*acceptable\*\* in another
 
-
-An external trust may be high risk in one environment and acceptable in another.
-
-
-
-Delegation on a hardened Tier-0 system is different from delegation on a general-purpose server.
+\- Delegation on a hardened Tier-0 system differs significantly from delegation on a general-purpose server
 
 
 
@@ -416,39 +358,33 @@ Context matters.
 
 
 
-Why Some High Findings Are Contextual
+---
 
 
 
-Certain areas—especially trusts and delegation—are inherently contextual.
+\## Why Some High Findings Are Contextual
 
 
 
-A finding may be marked High because:
+Certain areas—especially \*\*trusts and delegation\*\*—are inherently contextual.
 
 
 
-It has historically high abuse potential
+A finding may be marked \*\*High\*\* because:
+
+\- It has historically high abuse potential
+
+\- It significantly expands blast radius
+
+\- It bypasses traditional security boundaries
 
 
 
-It expands blast radius significantly
+This does \*\*not\*\* mean:
 
+\- The configuration is automatically wrong
 
-
-It bypasses traditional security boundaries
-
-
-
-This does not mean:
-
-
-
-The configuration is automatically wrong
-
-
-
-It must be removed without review
+\- It must be removed without review
 
 
 
@@ -456,55 +392,55 @@ Instead, it signals:
 
 
 
-“This configuration deserves careful validation, documentation, and ongoing oversight.”
+> “This configuration deserves careful validation, documentation, and ongoing oversight.”
 
 
 
-Remediation Prioritization Guidance
+---
 
 
 
-When reviewing findings, prioritize in this order:
+\## Remediation Prioritization Guidance
 
 
 
-Critical + Confirmed
-
-Immediate action
+When reviewing findings, prioritize in the following order:
 
 
 
-High + Unjustified
+1\. \*\*Critical + Confirmed\*\*  
 
-Plan remediation quickly
+&nbsp;  Immediate action
 
+2\. \*\*High + Unjustified\*\*  
 
+&nbsp;  Plan remediation quickly
 
-Medium + Poorly Understood
+3\. \*\*Medium + Poorly Understood\*\*  
 
-Investigate and document
+&nbsp;  Investigate and document
 
+4\. \*\*Low + Accumulative\*\*  
 
+&nbsp;  Schedule hygiene improvements
 
-Low + Accumulative
+5\. \*\*Info\*\*  
 
-Schedule hygiene improvements
-
-
-
-Info
-
-Use for context and reporting
+&nbsp;  Use for context and reporting
 
 
 
-Avoid “severity panic.”
+Avoid \*\*severity panic\*\*.  
 
-The goal is risk reduction, not chasing zero findings.
+The goal is \*\*risk reduction\*\*, not chasing zero findings.
 
 
 
-Using Findings in Practice
+---
+
+
+
+\## Using Findings in Practice
 
 
 
@@ -512,33 +448,25 @@ Security findings should be used to:
 
 
 
-Drive informed engineering decisions
+\- Drive informed engineering decisions
+
+\- Support audit readiness
+
+\- Document accepted risk
+
+\- Track improvement over time
 
 
 
-Support audit readiness
+They should \*\*not\*\* be used as:
 
 
 
-Document accepted risk
+\- A blame mechanism
+
+\- A replacement for incident response
+
+\- A substitute for threat modeling
 
 
-
-Track improvement over time
-
-
-
-They should not be used as:
-
-
-
-A blame mechanism
-
-
-
-A replacement for incident response
-
-
-
-A substitute for threat modeling
 
