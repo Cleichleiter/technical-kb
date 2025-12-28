@@ -17,8 +17,7 @@ Replication rights are powerful, rarely reviewed, and frequently misunderstood. 
 ---
 
 
-
-\## What Is DCSync?
+## What Is DCSync?
 
 
 
