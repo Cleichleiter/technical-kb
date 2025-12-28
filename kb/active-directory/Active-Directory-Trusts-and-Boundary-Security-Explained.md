@@ -1,4 +1,4 @@
-\# Active Directory Trusts and Boundary Security Explained
+\# Active Directory Trusts and Boundary Security
 
 
 
@@ -6,11 +6,11 @@
 
 
 
-This knowledge base article explains \*\*Active Directory trust relationships\*\*, why they represent \*\*security boundaries\*\*, and how misconfigured trusts can dramatically expand an attacker’s blast radius.
+This knowledge base article explains \*\*Active Directory trust relationships\*\*, why they function as \*\*security boundaries\*\*, and how misconfigured trusts can significantly expand an attacker’s blast radius.
 
 
 
-Trusts are often created to solve legitimate business problems, but they are frequently \*\*under-documented, poorly reviewed, and implicitly trusted\*\* long after their original purpose fades.
+Trusts are often implemented to solve legitimate business requirements, but they are frequently \*\*under-documented, insufficiently reviewed, and implicitly trusted\*\* long after their original purpose has faded.
 
 
 
@@ -22,33 +22,33 @@ Trusts are often created to solve legitimate business problems, but they are fre
 
 
 
-An Active Directory trust allows identities in one domain or forest to authenticate to resources in another.
+An Active Directory trust allows identities from one domain or forest to authenticate to resources in another.
 
 
 
-At a high level, a trust answers the question:
+At its core, a trust answers a single question:
 
 
 
-> “Should this domain accept identities issued somewhere else?”
+> “Should this domain accept identities issued by another directory?”
 
 
 
-Trusts are foundational to:
+Trusts are commonly used to support:
 
 
 
 \* Mergers and acquisitions
 
-\* Multi-forest environments
+\* Multi-forest architectures
 
 \* Legacy domain coexistence
 
-\* Partner access scenarios
+\* Partner or vendor access scenarios
 
 
 
-They are also one of the \*\*most misunderstood\*\* security constructs in AD.
+Despite their importance, trusts are among the \*\*most misunderstood security constructs\*\* in Active Directory.
 
 
 
@@ -60,25 +60,25 @@ They are also one of the \*\*most misunderstood\*\* security constructs in AD.
 
 
 
-A trust is not just a connectivity feature—it is a \*\*security boundary decision\*\*.
+A trust is not merely a connectivity feature. It represents a \*\*security boundary decision\*\*.
 
 
 
-When a trust exists, you are implicitly deciding:
+When a trust exists, the organization is implicitly deciding:
 
 
 
-\* Which identities are accepted
+\* Which external identities are accepted
 
-\* What authentication methods are allowed
+\* What authentication methods are permitted
 
-\* How much of the foreign directory is trusted
+\* How much of a foreign directory is trusted
 
 \* Whether compromise can propagate across environments
 
 
 
-Poorly controlled trusts allow attackers to:
+Poorly controlled trusts can allow attackers to:
 
 
 
@@ -88,7 +88,7 @@ Poorly controlled trusts allow attackers to:
 
 \* Abuse legacy authentication paths
 
-\* Bypass segmentation assumptions
+\* Bypass assumed network or identity segmentation
 
 
 
@@ -104,25 +104,27 @@ Poorly controlled trusts allow attackers to:
 
 
 
-Used to connect two separate domains.
+External trusts connect individual domains.
 
 
 
-Characteristics:
+\*\*Characteristics\*\*
 
 
 
-\* Often legacy
+\* Often legacy in nature
 
 \* Frequently long-lived
 
-\* Common in older environments
+\* Common in older or transitional environments
 
 
 
-Risk Consideration:
+\*\*Risk Consideration\*\*
 
-External trusts are often created quickly and reviewed rarely.
+
+
+External trusts are commonly created quickly and reviewed infrequently, making them high-risk over time.
 
 
 
@@ -134,25 +136,27 @@ External trusts are often created quickly and reviewed rarely.
 
 
 
-Used to connect entire forests.
+Forest trusts connect entire Active Directory forests.
 
 
 
-Characteristics:
+\*\*Characteristics\*\*
 
 
 
-\* Broader trust scope
+\* Broad trust scope
 
-\* Enables transitive authentication
+\* Transitive authentication by default
 
-\* Often created during M\&A activity
+\* Common during mergers and acquisitions
 
 
 
-Risk Consideration:
+\*\*Risk Consideration\*\*
 
-Forest trusts dramatically expand blast radius if not tightly scoped.
+
+
+Forest trusts can dramatically expand an attacker’s blast radius if boundary controls are not tightly enforced.
 
 
 
@@ -164,15 +168,13 @@ Forest trusts dramatically expand blast radius if not tightly scoped.
 
 
 
-\*\*Transitive trusts\*\* extend trust beyond the immediate domain.
+\* \*\*Transitive trusts\*\* extend trust beyond the immediately connected domain.
+
+\* \*\*Non-transitive trusts\*\* restrict trust strictly to the defined boundary.
 
 
 
-\*\*Non-transitive trusts\*\* restrict trust to the explicitly defined boundary.
-
-
-
-Transitivity increases convenience—but also increases risk.
+Transitivity increases convenience, but it also \*\*amplifies risk\*\* by extending authentication paths.
 
 
 
@@ -196,11 +198,11 @@ Without SID filtering:
 
 \* Trust boundaries become porous
 
-\* Cross-domain escalation becomes possible
+\* Cross-domain privilege escalation becomes possible
 
 
 
-SID filtering should be enabled on \*\*all external trusts\*\* unless there is a documented, validated reason not to.
+SID filtering should be enabled on \*\*all external trusts\*\* unless a documented and validated exception exists.
 
 
 
@@ -212,15 +214,15 @@ SID filtering should be enabled on \*\*all external trusts\*\* unless there is a
 
 
 
-Selective authentication restricts which principals can authenticate across a trust.
+Selective authentication restricts which principals are allowed to authenticate across a trust.
 
 
 
-Instead of “everyone is allowed,” access must be explicitly granted.
+Instead of permitting broad access, authentication rights must be explicitly granted.
 
 
 
-Benefits include:
+\*\*Benefits include\*\*
 
 
 
@@ -232,7 +234,7 @@ Benefits include:
 
 
 
-Trusts without selective authentication often assume \*\*far more trust than intended\*\*.
+Trusts without selective authentication often assume \*\*far more trust than was ever intended\*\*.
 
 
 
@@ -240,7 +242,7 @@ Trusts without selective authentication often assume \*\*far more trust than int
 
 
 
-\## Trust Authentication and Crypto Risks
+\## Trust Authentication and Cryptographic Risk
 
 
 
@@ -252,13 +254,13 @@ Trust security is also influenced by:
 
 \* Legacy authentication allowances
 
-\* Domain functional levels
+\* Domain and forest functional levels
 
-\* DC OS compatibility
+\* Domain controller operating system compatibility
 
 
 
-A trust that relies on weak cryptography weakens both sides of the boundary.
+A trust that relies on weak cryptography weakens \*\*both sides of the boundary\*\*.
 
 
 
@@ -274,19 +276,19 @@ High-risk trust patterns include:
 
 
 
-\* Trusts that no one remembers creating
+\* Trusts no one remembers creating
 
 \* Forest trusts without selective authentication
 
 \* External trusts without SID filtering
 
-\* Trusts using legacy crypto or NTLM
+\* Trusts allowing NTLM or weak cryptography
 
 \* Trusts treated as “internal” without justification
 
 
 
-These issues often persist unnoticed for years.
+These conditions often persist unnoticed for years.
 
 
 
@@ -326,37 +328,37 @@ All checks are \*\*read-only\*\* and designed to surface reviewable evidence.
 
 
 
-Trust-related findings are commonly rated:
+Trust-related findings are commonly rated as:
 
 
 
-\* \*\*High\*\*
+\*\*High Severity\*\*
 
 
 
-&nbsp; \* Broad, transitive trusts with weak boundary controls
+\* Broad, transitive trusts with weak boundary controls
 
-&nbsp; \* Trusts lacking SID filtering or selective authentication
-
-
-
-\* \*\*Medium\*\*
+\* Trusts lacking SID filtering or selective authentication
 
 
 
-&nbsp; \* Contextual trust configurations requiring validation
+\*\*Medium Severity\*\*
 
 
 
-\* \*\*Info\*\*
+\* Context-dependent trust configurations requiring validation
 
 
 
-&nbsp; \* Trust inventory and visibility data
+\*\*Informational\*\*
 
 
 
-High severity does not mean “remove immediately”—it means \*\*review deliberately\*\*.
+\* Trust inventory and visibility findings
+
+
+
+High severity does not imply immediate removal. It indicates the need to \*\*review deliberately and intentionally\*\*.
 
 
 
@@ -372,17 +374,17 @@ When trust risks are identified:
 
 
 
-1\. Confirm the business purpose of the trust
+1\. Confirm the original and current business purpose
 
-2\. Validate who actually needs cross-domain access
+2\. Validate who actually requires cross-domain access
 
-3\. Enable SID filtering where possible
+3\. Enable SID filtering where feasible
 
 4\. Implement selective authentication
 
-5\. Reduce trust scope aggressively
+5\. Aggressively reduce trust scope
 
-6\. Document intent and ownership
+6\. Document ownership, intent, and review cadence
 
 
 
@@ -400,19 +402,19 @@ Trusts should be treated as \*\*living security decisions\*\*, not permanent inf
 
 \*\*“It’s an internal trust, so it’s safe.”\*\*
 
-Internal does not mean low risk.
+Internal does not equate to low risk.
 
 
 
 \*\*“We’ve always had that trust.”\*\*
 
-Longevity does not equal legitimacy.
+Longevity does not establish legitimacy.
 
 
 
-\*\*“Trusts don’t matter unless breached.”\*\*
+\*\*“Trusts don’t matter unless we’re breached.”\*\*
 
-Trusts define how far breaches spread.
+Trusts define how far a breach can spread.
 
 
 
@@ -424,11 +426,11 @@ Trusts define how far breaches spread.
 
 
 
-Trusts define how compromise propagates.
+Trusts determine how compromise propagates.
 
 
 
-A single weak trust can quietly convert \*\*one incident\*\* into \*\*many\*\*.
+A single weak trust can quietly transform \*\*one incident\*\* into \*\*many\*\*.
 
 
 
