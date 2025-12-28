@@ -26,19 +26,15 @@ Kerberos uses symmetric encryption to protect:
 
 
 
-\* Authentication tickets (TGTs)
+\- Authentication tickets (TGTs)
 
-\* Service tickets
+\- Service tickets
 
-\* Credential exchanges between clients and services
-
-
-
-Active Directory supports multiple encryption types to maintain backward compatibility with older systems and applications.
+\- Credential exchanges between clients and services
 
 
 
-Over time, this compatibility becomes a \*\*security liability\*\*.
+Active Directory supports multiple encryption types to maintain backward compatibility with older systems and applications. Over time, this compatibility becomes a \*\*security liability\*\*.
 
 
 
@@ -54,15 +50,21 @@ Over time, this compatibility becomes a \*\*security liability\*\*.
 
 
 
-\* DES-CBC-CRC
+| Attribute | Value |
 
-\* DES-CBC-MD5
+|---------|------|
+
+| Status | Deprecated |
+
+| Risk Level | High |
 
 
 
-\*\*Status:\*\* Deprecated
+\*\*Variants:\*\*
 
-\*\*Risk Level:\*\* High
+\- DES-CBC-CRC  
+
+\- DES-CBC-MD5  
 
 
 
@@ -78,9 +80,13 @@ DES is cryptographically broken and should not be used in any modern environment
 
 
 
-\*\*Status:\*\* Legacy
+| Attribute | Value |
 
-\*\*Risk Level:\*\* Medium to High
+|---------|------|
+
+| Status | Legacy |
+
+| Risk Level | Medium to High |
 
 
 
@@ -88,11 +94,11 @@ RC4 remains widely enabled due to historical compatibility but is vulnerable to:
 
 
 
-\* Offline cracking
+\- Offline cracking
 
-\* Kerberoasting amplification
+\- Kerberoasting amplification
 
-\* Downgrade attacks
+\- Downgrade attacks
 
 
 
@@ -108,9 +114,13 @@ RC4 is especially dangerous for \*\*service accounts\*\*.
 
 
 
-\*\*Status:\*\* Modern
+| Attribute | Value |
 
-\*\*Risk Level:\*\* Low
+|---------|------|
+
+| Status | Modern |
+
+| Risk Level | Low |
 
 
 
@@ -118,11 +128,11 @@ AES encryption provides significantly stronger protection and should be preferre
 
 
 
-\* Service accounts
+\- Service accounts
 
-\* Computer accounts
+\- Computer accounts
 
-\* Privileged users
+\- Privileged users
 
 
 
@@ -130,11 +140,11 @@ AES support depends on:
 
 
 
-\* Domain controller OS level
+\- Domain controller OS level
 
-\* Account configuration
+\- Account configuration
 
-\* Functional level readiness
+\- Functional level readiness
 
 
 
@@ -150,15 +160,15 @@ Kerberos encryption behavior is influenced by:
 
 
 
-\* Domain controller OS capabilities
+\- Domain controller OS capabilities
 
-\* Domain and forest functional levels
+\- Domain and forest functional levels
 
-\* Account-level settings (`msDS-SupportedEncryptionTypes`)
+\- Account-level settings (`msDS-SupportedEncryptionTypes`)
 
-\* Group Policy and registry settings
+\- Group Policy and registry settings
 
-\* Application compatibility requirements
+\- Application compatibility requirements
 
 
 
@@ -178,23 +188,23 @@ Service accounts are especially sensitive because:
 
 
 
-\* They often have SPNs
+\- They often have SPNs
 
-\* They are frequently long-lived
+\- They are frequently long-lived
 
-\* They are prime targets for Kerberoasting
-
-
-
-Risk patterns include:
+\- They are prime targets for Kerberoasting
 
 
 
-\* RC4-only service accounts
+Common risk patterns include:
 
-\* DES-enabled service accounts
 
-\* Privileged service accounts without AES enabled
+
+\- RC4-only service accounts
+
+\- DES-enabled service accounts
+
+\- Privileged service accounts without AES enabled
 
 
 
@@ -214,11 +224,11 @@ Kerberos encryption strength is constrained by:
 
 
 
-\* The oldest domain controller OS in the domain
+\- The oldest domain controller OS in the domain
 
-\* Forest functional level
+\- Forest functional level
 
-\* Patch level consistency
+\- Patch level consistency
 
 
 
@@ -226,11 +236,11 @@ Legacy domain controllers can:
 
 
 
-\* Prevent AES-only enforcement
+\- Prevent AES-only enforcement
 
-\* Force weaker encryption for compatibility
+\- Force weaker encryption for compatibility
 
-\* Delay security hardening initiatives
+\- Delay security hardening initiatives
 
 
 
@@ -246,15 +256,15 @@ The scripts in this repository evaluate:
 
 
 
-\* Domain and forest functional levels
+\- Domain and forest functional levels
 
-\* Domain controller operating systems
+\- Domain controller operating systems
 
-\* Service accounts with SPNs
+\- Service accounts with SPNs
 
-\* Computer accounts and their encryption flags
+\- Computer accounts and their encryption flags
 
-\* Presence of DES-enabled or RC4-only configurations
+\- Presence of DES-enabled or RC4-only configurations
 
 
 
@@ -270,41 +280,33 @@ The assessment provides \*\*signals\*\*, not enforcement.
 
 
 
-Crypto findings are typically rated:
+Crypto findings are typically rated as follows:
 
 
 
-\* \*\*High\*\*
+\### High
+
+\- DES-enabled accounts
+
+\- DES-enabled service principals
 
 
 
-&nbsp; \* DES-enabled accounts
+\### Medium
 
-&nbsp; \* DES-enabled service principals
-
-
-
-\* \*\*Medium\*\*
+\- RC4-only service or computer accounts
 
 
 
-&nbsp; \* RC4-only service or computer accounts
+\### Low
+
+\- Functional level limitations affecting crypto hardening
 
 
 
-\* \*\*Low\*\*
+\### Info
 
-
-
-&nbsp; \* Functional level limitations affecting crypto hardening
-
-
-
-\* \*\*Info\*\*
-
-
-
-&nbsp; \* Inventory of encryption posture
+\- Inventory of encryption posture
 
 
 
@@ -350,19 +352,19 @@ Crypto hardening should be incremental and validated.
 
 
 
-\*\*“We’re using Kerberos, so it’s secure.”\*\*
+\*\*“We’re using Kerberos, so it’s secure.”\*\*  
 
 Kerberos is only as strong as its encryption configuration.
 
 
 
-\*\*“RC4 is still supported, so it’s fine.”\*\*
+\*\*“RC4 is still supported, so it’s fine.”\*\*  
 
 Supported does not mean secure.
 
 
 
-\*\*“This would break everything.”\*\*
+\*\*“This would break everything.”\*\*  
 
 Often it does not—but testing is required.
 
@@ -381,8 +383,6 @@ Legacy cryptography weakens authentication silently.
 
 
 Over time, it converts strong identity controls into \*\*cheap offline attack opportunities\*\*.
-
-
 
 
 
