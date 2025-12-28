@@ -1,4 +1,4 @@
-\# Active Directory Delegation and ACL Abuse Explained
+\# Active Directory Delegation and ACL Abuse Explained a
 
 
 
