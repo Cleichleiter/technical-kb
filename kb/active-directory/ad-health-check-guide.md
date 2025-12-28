@@ -1,494 +1,246 @@
-# \# Active Directory Health Check Guide
+# Active Directory Health Check Guide
 
-# 
+## Purpose
 
-# \## Purpose
+This knowledge base article provides a structured overview of how to assess the health of an Active Directory (AD) environment. It outlines critical areas to evaluate, why they matter, and common indicators of healthy versus unhealthy states.
 
-# 
+This guide is intended to support troubleshooting, audits, migrations, and ongoing operational hygiene.
 
-# This knowledge base article provides a structured overview of how to assess the health of an Active Directory (AD) environment. It outlines critical areas to evaluate, why they matter, and common indicators of healthy versus unhealthy states.
+---
 
-# 
+## Overview
 
-# This guide is intended to support troubleshooting, audits, migrations, and ongoing operational hygiene.
+Active Directory is a foundational dependency for authentication, authorization, and policy enforcement in Windows environments. Issues within AD often surface indirectly, such as failed logins, Group Policy inconsistencies, replication delays, or application authentication failures.
 
-# 
+A comprehensive AD health check focuses on:
 
-# ---
+* Domain controller health
+* Replication integrity
+* DNS functionality
+* SYSVOL consistency
+* Time synchronization
+* Security posture and configuration drift
 
-# 
+Health checks should be performed regularly and **always prior to**:
 
-# \## Overview
+* Server or domain controller migrations
+* Forest or domain functional level changes
+* Major application deployments
+* Security audits or incident response
 
-# 
+---
 
-# Active Directory is a foundational dependency for authentication, authorization, and policy enforcement in Windows environments. Issues within AD often surface indirectly, such as failed logins, Group Policy inconsistencies, replication delays, or application authentication failures.
+## Scope and Applicability
 
-# 
+This guide applies to:
 
-# A comprehensive AD health check focuses on:
+* Active Directory Domain Services (AD DS)
+* Windows Server 2016 and later
+* Single-domain and multi-domain forests
+* On-premises and hybrid environments
 
-# 
+This guide does **not** provide:
 
-# \* Domain controller health
+* Step-by-step remediation procedures
+* Forest redesign or consolidation strategies
+* Client-specific configurations
 
-# \* Replication integrity
+---
 
-# \* DNS functionality
+## Prerequisites
 
-# \* SYSVOL consistency
+To perform or interpret an AD health check, the following are assumed:
 
-# \* Time synchronization
+* Domain or enterprise administrative access (read-only at minimum)
+* Familiarity with core Active Directory concepts
+* Access to domain controllers and event logs
+* DNS administrative visibility
 
-# \* Security posture and configuration drift
+---
 
-# 
+## Core Health Check Areas
 
-# Health checks should be performed regularly and \*\*always prior to\*\*:
+### Domain Controller Availability
 
-# 
+Each domain controller should:
 
-# \* Server or domain controller migrations
+* Be online and reachable
+* Advertise itself correctly in DNS
+* Respond to authentication requests
+* Hold expected FSMO roles (if applicable)
 
-# \* Forest or domain functional level changes
+**Indicators of concern include**:
 
-# \* Major application deployments
+* Intermittent DC availability
+* Authentication delays
+* Missing or stale DNS records
 
-# \* Security audits or incident response
+---
 
-# 
+### Replication Health
 
-# ---
+Replication ensures consistency across domain controllers.
 
-# 
+**Key indicators**:
 
-# \## Scope and Applicability
+* No persistent replication failures
+* Acceptable replication latency
+* No lingering objects or USN rollback events
 
-# 
+Replication issues commonly lead to:
 
-# This guide applies to:
+* Inconsistent Group Policy application
+* Authentication anomalies
+* Directory data divergence
 
-# 
+---
 
-# \* Active Directory Domain Services (AD DS)
+### DNS Health
 
-# \* Windows Server 2016 and later
+Active Directory is tightly coupled to DNS.
 
-# \* Single-domain and multi-domain forests
+**Critical DNS checks include**:
 
-# \* On-premises and hybrid environments
+* Correct SRV record registration
+* Domain controllers using only AD-integrated DNS servers
+* No external DNS servers configured on DC NICs
+* Forward and reverse lookup zone integrity
 
-# 
+DNS misconfiguration is one of the most common root causes of AD instability.
 
-# This guide does \*\*not\*\* provide:
+---
 
-# 
+### SYSVOL and Group Policy
 
-# \* Step-by-step remediation procedures
+SYSVOL consistency is required for reliable Group Policy delivery.
 
-# \* Forest redesign or consolidation strategies
+**Health indicators**:
 
-# \* Client-specific configurations
+* SYSVOL replicated successfully across domain controllers
+* No DFS-R or FRS backlogs
+* Group Policy Objects accessible and version-consistent
 
-# 
+SYSVOL issues typically manifest as:
 
-# ---
+* Group Policy not applying
+* Login script failures
+* Inconsistent security settings
 
-# 
+---
 
-# \## Prerequisites
+### Time Synchronization
 
-# 
+Kerberos authentication is time-sensitive.
 
-# To perform or interpret an AD health check, the following are assumed:
+**Key requirements**:
 
-# 
+* All domain members synchronized to the domain hierarchy
+* PDC Emulator synchronized to a reliable time source
+* Minimal time drift across the domain
 
-# \* Domain or enterprise administrative access (read-only at minimum)
+Time skew commonly causes:
 
-# \* Familiarity with core Active Directory concepts
+* Authentication failures
+* Kerberos ticket issues
+* Application login errors
 
-# \* Access to domain controllers and event logs
+---
 
-# \* DNS administrative visibility
+### FSMO Roles
 
-# 
+FSMO roles should:
 
-# ---
+* Be clearly assigned
+* Reside on healthy, stable domain controllers
+* Be documented and monitored
 
-# 
+Unhealthy FSMO placement increases risk during outages or migrations.
 
-# \## Core Health Check Areas
+---
 
-# 
+### Event Logs and System Errors
 
-# \### Domain Controller Availability
+Event logs often reveal issues before they become user-visible.
 
-# 
+**Key logs to review**:
 
-# Each domain controller should:
+* Directory Service
+* DNS Server
+* DFS Replication
+* System
 
-# 
+Recurring warnings or errors should be investigated even if no active outage exists.
 
-# \* Be online and reachable
+---
 
-# \* Advertise itself correctly in DNS
+## Security and Configuration Baseline
 
-# \* Respond to authentication requests
+A health check should also include:
 
-# \* Hold expected FSMO roles (if applicable)
+* Secure LDAP configuration
+* Legacy protocol reduction or removal where possible
+* Review of privileged group memberships
+* Password and lockout policy alignment
+* Identification of stale computer or user objects
 
-# 
+Security drift is a common long-term AD risk.
 
-# \*\*Indicators of concern include\*\*:
+---
 
-# 
+## Performance and Scaling Considerations
 
-# \* Intermittent DC availability
+As environments grow, additional factors become important:
 
-# \* Authentication delays
+* Domain controller hardware sizing
+* Site and subnet configuration accuracy
+* Replication topology optimization
+* Network latency between sites
 
-# \* Missing or stale DNS records
+Ignoring scaling considerations often results in “slow AD” symptoms rather than clear failures.
 
-# 
+---
 
-# ---
+## Risks and Caveats
 
-# 
+Common AD health risks include:
 
-# \### Replication Health
+* Assuming “no alerts” equates to a healthy environment
+* Treating DNS as independent from Active Directory
+* Ignoring replication warnings
+* Performing migrations without a baseline health check
+* Making changes without understanding FSMO dependencies
 
-# 
+Preventative checks reduce the need for emergency remediation.
 
-# Replication ensures consistency across domain controllers.
+---
 
-# 
+## Validation and Expected Outcomes
 
-# \*\*Key indicators\*\*:
+A healthy AD environment typically exhibits:
 
-# 
+* Clean replication status
+* Stable DNS resolution
+* Consistent SYSVOL state
+* Minimal AD-related event log noise
+* Predictable authentication behavior
 
-# \* No persistent replication failures
+Health check results should be documented and retained for comparison over time.
 
-# \* Acceptable replication latency
+---
 
-# \* No lingering objects or USN rollback events
+## Related SOPs and KBs
 
-# 
+* `kb/active-directory/fsmo-roles-explained.md`
+* `sop/server-migration/pre-migration-checklist.md`
+* `sop/server-migration/post-migration-validation.md`
 
-# Replication issues commonly lead to:
+---
 
-# 
+## References
 
-# \* Inconsistent Group Policy application
+* Microsoft Active Directory troubleshooting documentation
+* Windows Server AD DS architecture documentation
+* Microsoft best practices for Active Directory DNS integration
 
-# \* Authentication anomalies
-
-# \* Directory data divergence
-
-# 
-
-# ---
-
-# 
-
-# \### DNS Health
-
-# 
-
-# Active Directory is tightly coupled to DNS.
-
-# 
-
-# \*\*Critical DNS checks include\*\*:
-
-# 
-
-# \* Correct SRV record registration
-
-# \* Domain controllers using only AD-integrated DNS servers
-
-# \* No external DNS servers configured on DC NICs
-
-# \* Forward and reverse lookup zone integrity
-
-# 
-
-# DNS misconfiguration is one of the most common root causes of AD instability.
-
-# 
-
-# ---
-
-# 
-
-# \### SYSVOL and Group Policy
-
-# 
-
-# SYSVOL consistency is required for reliable Group Policy delivery.
-
-# 
-
-# \*\*Health indicators\*\*:
-
-# 
-
-# \* SYSVOL replicated successfully across domain controllers
-
-# \* No DFS-R or FRS backlogs
-
-# \* Group Policy Objects accessible and version-consistent
-
-# 
-
-# SYSVOL issues typically manifest as:
-
-# 
-
-# \* Group Policy not applying
-
-# \* Login script failures
-
-# \* Inconsistent security settings
-
-# 
-
-# ---
-
-# 
-
-# \### Time Synchronization
-
-# 
-
-# Kerberos authentication is time-sensitive.
-
-# 
-
-# \*\*Key requirements\*\*:
-
-# 
-
-# \* All domain members synchronized to the domain hierarchy
-
-# \* PDC Emulator synchronized to a reliable time source
-
-# \* Minimal time drift across the domain
-
-# 
-
-# Time skew commonly causes:
-
-# 
-
-# \* Authentication failures
-
-# \* Kerberos ticket issues
-
-# \* Application login errors
-
-# 
-
-# ---
-
-# 
-
-# \### FSMO Roles
-
-# 
-
-# FSMO roles should:
-
-# 
-
-# \* Be clearly assigned
-
-# \* Reside on healthy, stable domain controllers
-
-# \* Be documented and monitored
-
-# 
-
-# Unhealthy FSMO placement increases risk during outages or migrations.
-
-# 
-
-# ---
-
-# 
-
-# \### Event Logs and System Errors
-
-# 
-
-# Event logs often reveal issues before they become user-visible.
-
-# 
-
-# \*\*Key logs to review\*\*:
-
-# 
-
-# \* Directory Service
-
-# \* DNS Server
-
-# \* DFS Replication
-
-# \* System
-
-# 
-
-# Recurring warnings or errors should be investigated even if no active outage exists.
-
-# 
-
-# ---
-
-# 
-
-# \## Security and Configuration Baseline
-
-# 
-
-# A health check should also include:
-
-# 
-
-# \* Secure LDAP configuration
-
-# \* Legacy protocol reduction or removal where possible
-
-# \* Review of privileged group memberships
-
-# \* Password and lockout policy alignment
-
-# \* Identification of stale computer or user objects
-
-# 
-
-# Security drift is a common long-term AD risk.
-
-# 
-
-# ---
-
-# 
-
-# \## Performance and Scaling Considerations
-
-# 
-
-# As environments grow, additional factors become important:
-
-# 
-
-# \* Domain controller hardware sizing
-
-# \* Site and subnet configuration accuracy
-
-# \* Replication topology optimization
-
-# \* Network latency between sites
-
-# 
-
-# Ignoring scaling considerations often results in “slow AD” symptoms rather than clear failures.
-
-# 
-
-# ---
-
-# 
-
-# \## Risks and Caveats
-
-# 
-
-# Common AD health risks include:
-
-# 
-
-# \* Assuming “no alerts” equates to a healthy environment
-
-# \* Treating DNS as independent from Active Directory
-
-# \* Ignoring replication warnings
-
-# \* Performing migrations without a baseline health check
-
-# \* Making changes without understanding FSMO dependencies
-
-# 
-
-# Preventative checks reduce the need for emergency remediation.
-
-# 
-
-# ---
-
-# 
-
-# \## Validation and Expected Outcomes
-
-# 
-
-# A healthy AD environment typically exhibits:
-
-# 
-
-# \* Clean replication status
-
-# \* Stable DNS resolution
-
-# \* Consistent SYSVOL state
-
-# \* Minimal AD-related event log noise
-
-# \* Predictable authentication behavior
-
-# 
-
-# Health check results should be documented and retained for comparison over time.
-
-# 
-
-# ---
-
-# 
-
-# \## Related SOPs and KBs
-
-# 
-
-# \* `kb/active-directory/fsmo-roles-explained.md`
-
-# \* `sop/server-migration/pre-migration-checklist.md`
-
-# \* `sop/server-migration/post-migration-validation.md`
-
-# 
-
-# ---
-
-# 
-
-# \## References
-
-# 
-
-# \* Microsoft Active Directory troubleshooting documentation
-
-# \* Windows Server AD DS architecture documentation
-
-# \* Microsoft best practices for Active Directory DNS integration
-
-# 
-
-# ---
-
-# 
-
-# 
+---
 
