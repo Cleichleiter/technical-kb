@@ -1,22 +1,28 @@
-Active Directory Security Assessment Overview
-
-Purpose
+\# Active Directory Security Assessment Overview
 
 
 
-This knowledge base article provides an overview of the Active Directory (AD) security assessment framework implemented in this repository. The goal of this assessment is to deliver repeatable, read-only, and defensible visibility into common Active Directory security risks without introducing operational impact.
+\## Purpose
 
 
 
-This framework is designed for use by systems engineers, security engineers, and auditors who need accurate, explainable findings rather than opaque “scanner output.”
+This knowledge base article provides an overview of the \*\*Active Directory (AD) security assessment framework\*\* implemented in this repository. The goal of this assessment is to deliver \*\*repeatable, read-only, and defensible visibility\*\* into common Active Directory security risks without introducing operational impact.
 
 
 
-Scope of the Assessment
+This framework is designed for systems engineers, security engineers, and auditors who need \*\*accurate, explainable findings\*\* rather than opaque “scanner output.”
 
 
 
-The AD security assessment focuses on identity, authentication, authorization, and trust boundaries within an Active Directory environment.
+---
+
+
+
+\## Scope of the Assessment
+
+
+
+The AD security assessment focuses on \*\*identity, authentication, authorization, and trust boundaries\*\* within an Active Directory environment.
 
 
 
@@ -24,45 +30,37 @@ The assessment evaluates the following high-risk domains:
 
 
 
-Privileged identity and group membership
+\- Privileged identity and group membership  
+
+\- Delegation and Kerberos configuration  
+
+\- Replication and directory control rights  
+
+\- Group Policy security posture  
+
+\- Certificate Services (AD CS) exposure  
+
+\- Domain and forest functional levels  
+
+\- Cryptographic and legacy protocol usage  
+
+\- Trust relationships and boundary controls  
 
 
 
-Delegation and Kerberos configuration
+All checks are \*\*read-only\*\* and rely exclusively on directory queries and security descriptor inspection.
 
 
 
-Replication and directory control rights
+---
 
 
 
-Group Policy security posture
+\## Design Principles
 
 
 
-Certificate Services (AD CS) exposure
-
-
-
-Domain and forest functional levels
-
-
-
-Cryptographic and legacy protocol usage
-
-
-
-Trust relationships and boundary controls
-
-
-
-All checks are read-only and rely exclusively on directory queries and security descriptor inspection.
-
-
-
-Design Principles
-
-1\. Read-Only by Design
+\### 1. Read-Only by Design
 
 
 
@@ -70,27 +68,25 @@ All scripts are intentionally non-destructive:
 
 
 
-No changes to objects
+\- No changes to objects  
+
+\- No policy enforcement  
+
+\- No permission modifications  
+
+\- No registry writes  
 
 
 
-No policy enforcement
+This allows the assessment to be safely run in \*\*production environments\*\* without change control.
 
 
 
-No permission modifications
+---
 
 
 
-No registry writes
-
-
-
-This allows the assessment to be safely run in production environments without change control.
-
-
-
-2\. Evidence-Based Findings
+\### 2. Evidence-Based Findings
 
 
 
@@ -98,15 +94,11 @@ Each script returns structured findings that include:
 
 
 
-What was detected
+\- What was detected  
 
+\- Why it matters  
 
-
-Why it matters
-
-
-
-Supporting data (counts, samples, configuration state)
+\- Supporting data (counts, samples, configuration state)  
 
 
 
@@ -114,47 +106,37 @@ This ensures findings can be:
 
 
 
-Validated by engineers
+\- Validated by engineers  
+
+\- Explained to auditors  
+
+\- Reviewed during incident response  
 
 
 
-Explained to auditors
+---
 
 
 
-Reviewed during incident response
+\### 3. Context-Aware Severity
 
 
 
-3\. Context-Aware Severity
+Severity levels reflect \*\*potential impact\*\*, not automatic compromise:
 
 
 
-Severity levels reflect potential impact, not automatic compromise:
+\- \*\*Critical\*\* – Likely domain compromise or Tier-0 control  
 
+\- \*\*High\*\* – Serious misconfiguration with clear abuse paths  
 
+\- \*\*Medium\*\* – Risky configuration requiring validation  
 
-Critical – Likely domain compromise or Tier-0 control
+\- \*\*Low\*\* – Hygiene or defense-in-depth improvement  
 
+\- \*\*Info\*\* – Visibility and inventory data  
 
-
-High – Serious misconfiguration with clear abuse paths
-
-
-
-Medium – Risky configuration requiring validation
-
-
-
-Low – Hygiene or defense-in-depth improvement
-
-
-
-Info – Visibility and inventory data
-
-
-
-Warning – Assessment limitations or missing prerequisites
+\- \*\*Warning\*\* – Assessment limitations or missing prerequisites  
 
 
 
@@ -162,9 +144,15 @@ Severity does not imply intent or exploitability in isolation.
 
 
 
-Assessment Categories
+---
 
-Identity \& Privilege
+
+
+\## Assessment Categories
+
+
+
+\### Identity \& Privilege
 
 
 
@@ -172,23 +160,21 @@ Focuses on who can do what inside the domain:
 
 
 
-Privileged group membership
+\- Privileged group membership  
+
+\- `adminCount` and AdminSDHolder behavior  
+
+\- Shadow admin delegation paths  
+
+\- Service account privilege exposure  
 
 
 
-adminCount and AdminSDHolder behavior
+---
 
 
 
-Shadow admin delegation paths
-
-
-
-Service account privilege exposure
-
-
-
-Kerberos \& Authentication
+\### Kerberos \& Authentication
 
 
 
@@ -196,23 +182,21 @@ Evaluates authentication pathways attackers frequently abuse:
 
 
 
-Unconstrained and constrained delegation
+\- Unconstrained and constrained delegation  
+
+\- Resource-based constrained delegation (RBCD)  
+
+\- Encryption types and legacy crypto usage  
+
+\- Delegatable privileged accounts  
 
 
 
-Resource-based constrained delegation (RBCD)
+---
 
 
 
-Encryption types and legacy crypto usage
-
-
-
-Delegatable privileged accounts
-
-
-
-Replication \& Directory Control
+\### Replication \& Directory Control
 
 
 
@@ -220,19 +204,19 @@ Identifies control-plane risks:
 
 
 
-DCSync-equivalent replication rights
+\- DCSync-equivalent replication rights  
+
+\- Unauthorized directory control permissions  
+
+\- Tier-0 object ACL exposure  
 
 
 
-Unauthorized directory control permissions
+---
 
 
 
-Tier-0 object ACL exposure
-
-
-
-Group Policy
+\### Group Policy
 
 
 
@@ -240,19 +224,19 @@ Analyzes configuration enforcement and drift:
 
 
 
-Security baseline differences
+\- Security baseline differences  
+
+\- GPO permissions  
+
+\- Link order and enforcement behavior  
 
 
 
-GPO permissions
+---
 
 
 
-Link order and enforcement behavior
-
-
-
-Certificate Services (AD CS)
+\### Certificate Services (AD CS)
 
 
 
@@ -260,19 +244,19 @@ Surfaces common certificate abuse risks:
 
 
 
-Risky certificate templates
+\- Risky certificate templates  
+
+\- Issued certificate visibility  
+
+\- CA configuration exposure  
 
 
 
-Issued certificate visibility
+---
 
 
 
-CA configuration exposure
-
-
-
-Trusts \& Boundaries
+\### Trusts \& Boundaries
 
 
 
@@ -280,23 +264,21 @@ Examines cross-domain and cross-forest risk:
 
 
 
-External and forest trusts
+\- External and forest trusts  
+
+\- SID filtering  
+
+\- Selective authentication  
+
+\- Trust crypto posture  
 
 
 
-SID filtering
+---
 
 
 
-Selective authentication
-
-
-
-Trust crypto posture
-
-
-
-Platform \& Crypto Baseline
+\### Platform \& Crypto Baseline
 
 
 
@@ -304,19 +286,19 @@ Evaluates foundational security capabilities:
 
 
 
-Domain and forest functional levels
+\- Domain and forest functional levels  
+
+\- Domain controller OS distribution  
+
+\- Kerberos encryption readiness  
 
 
 
-Domain controller OS distribution
+---
 
 
 
-Kerberos encryption readiness
-
-
-
-How the Assessment Is Executed
+\## How the Assessment Is Executed
 
 
 
@@ -324,39 +306,33 @@ The assessment is orchestrated through a central runner that:
 
 
 
-Discovers available security test scripts
+\- Discovers available security test scripts  
+
+\- Executes each script independently  
+
+\- Aggregates findings into a unified structure  
+
+\- Supports export for reporting and review  
 
 
 
-Executes each script independently
+Scripts are intentionally \*\*loosely coupled\*\* so they can be:
 
 
 
-Aggregates findings into a unified structure
+\- Run individually  
+
+\- Extended without breaking orchestration  
+
+\- Used independently during incident response  
 
 
 
-Supports export for reporting and review
+---
 
 
 
-Scripts are intentionally loosely coupled so they can be:
-
-
-
-Run individually
-
-
-
-Extended without breaking orchestration
-
-
-
-Used independently in incident response
-
-
-
-What This Assessment Does Not Do
+\## What This Assessment Does Not Do
 
 
 
@@ -364,19 +340,13 @@ This framework is not:
 
 
 
-A penetration test
+\- A penetration test  
 
+\- An exploitation toolkit  
 
+\- A compliance attestation  
 
-An exploitation toolkit
-
-
-
-A compliance attestation
-
-
-
-An automated remediation system
+\- An automated remediation system  
 
 
 
@@ -384,23 +354,21 @@ It does not:
 
 
 
-Attempt lateral movement
+\- Attempt lateral movement  
+
+\- Exploit misconfigurations  
+
+\- Modify Active Directory objects  
+
+\- Replace security monitoring or EDR  
 
 
 
-Exploit misconfigurations
+---
 
 
 
-Modify Active Directory objects
-
-
-
-Replace security monitoring or EDR
-
-
-
-Intended Use Cases
+\## Intended Use Cases
 
 
 
@@ -408,31 +376,25 @@ This assessment is suitable for:
 
 
 
-Security posture reviews
+\- Security posture reviews  
+
+\- Pre-audit preparation  
+
+\- Incident response validation  
+
+\- Domain migration readiness  
+
+\- Technical risk documentation  
+
+\- Continuous improvement tracking  
 
 
 
-Pre-audit preparation
+---
 
 
 
-Incident response validation
-
-
-
-Domain migration readiness
-
-
-
-Technical risk documentation
-
-
-
-Continuous improvement tracking
-
-
-
-Next Steps
+\## Next Steps
 
 
 
@@ -440,17 +402,13 @@ After reviewing this overview, proceed to the following KB articles to understan
 
 
 
-Privileged identity and adminCount behavior
+\- Privileged identity and `adminCount` behavior  
+
+\- Shadow admin and delegation paths  
+
+\- Kerberos and crypto configuration risks  
+
+\- Trust and boundary security  
 
 
-
-Shadow admin and delegation paths
-
-
-
-Kerberos and crypto configuration risks
-
-
-
-Trust and boundary security
 
